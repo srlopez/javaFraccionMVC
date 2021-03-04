@@ -1,0 +1,29 @@
+{
+	"folders": {},
+	"connections": {
+		"sqlite_jdbc-177f94f1200-7119bbdf4d4a6084": {
+			"provider": "generic",
+			"driver": "sqlite_jdbc",
+			"name": "fracciones.db",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"database": "C:\\Users\\santi\\source\\eclipse\\fraccionMVC\\data\\fracciones.db",
+				"url": "jdbc:sqlite:C:\\Users\\santi\\source\\eclipse\\fraccionMVC\\data\\fracciones.db",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false
+		}
+	}
+}
