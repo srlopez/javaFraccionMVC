@@ -17,7 +17,9 @@ public class Calculadora {
 	}
 
 	// Máximo Común Divisor
-	private int mcd(int x, int y) {
+	private int mcd(int xs, int ys) {
+		int x =java.lang.Math.abs(xs);
+		int y =java.lang.Math.abs(ys);
 		if (x == 0)
 			return 1;
 		while (x != y)

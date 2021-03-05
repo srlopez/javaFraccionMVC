@@ -34,10 +34,11 @@ public class Fraccion {
             try {
                 numerador = Integer.parseInt(enteross[0].trim());
                 denominador = Integer.parseInt(enteross[1].trim());
-            	if (denominador==0) throw new IllegalArgumentException("Denominador ilegal");
+            	if (denominador==0) throw new IllegalArgumentException("Denominador ilegal ("+numerador+"/"+denominador+")");
             } catch (Exception e) {
             	throw e;
             }
+        
     }
     
     public int getNumerador() { return numerador; }
@@ -51,7 +52,8 @@ public class Fraccion {
      * @return
      */
     public boolean esPropia() {
-    	return numerador<denominador;
+    	//return numerador<denominador;
+    	return java.lang.Math.abs(numerador)<java.lang.Math.abs(denominador);
     }
 
     /**

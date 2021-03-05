@@ -1,6 +1,7 @@
 package ui;
 
 import aritmetica.Fraccion;
+import aritmetica.Operacion;
 
 import java.util.List;
 import java.util.Scanner;
@@ -22,10 +23,6 @@ public class ViewTerminal {
 		}
 	}
 
-	public void mostrarResultado(Fraccion result) {
-		mostrarMsg("Suma: " + result.toString());
-	}
-
 	public void mostrarMsg(String format, Object... args) {
 		System.out.printf(format, args);
 		System.out.println();
@@ -44,10 +41,14 @@ public class ViewTerminal {
 		return input.next().toUpperCase().charAt(0);
 	}
 
-	public void mostrarOperaciones(List<String> ops) {
-		for (String op : ops) {
+	public void mostrarOperaciones(List<Operacion> list) {
+		for (Operacion op : list) {
 			System.out.println(op);
 		}
-
+	}
+	public void mostrarResultados(List<String> list) {
+		for (String text : list) {
+			System.out.println(text);
+		}
 	}
 }

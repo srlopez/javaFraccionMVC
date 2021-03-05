@@ -49,6 +49,7 @@ public class CtrlTerminal {
 			default:
 			}
 		}
+		sistema.finalizar();
 		vista.mostrarMsg("MVC Fin");
 	}
 
@@ -69,7 +70,7 @@ public class CtrlTerminal {
 			Requisitos.regla2();
 			// Ejecución de Caso de Uso
 			Fraccion result = sistema.suma(f1, f2);
-			vista.mostrarResultado(result);
+			vista.mostrarMsg("Resultado+ %s",result);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -88,7 +89,7 @@ public class CtrlTerminal {
 			Requisitos.regla2();
 			// Ejecución de Caso de Uso
 			Fraccion result = sistema.multiplica(f1, f2);
-			vista.mostrarResultado(result);
+			vista.mostrarMsg("Resultado* %s",result);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -101,7 +102,7 @@ public class CtrlTerminal {
 		vista.mostrarMsg("UC#3 Ranking");
 
 		try {
-			vista.mostrarOperaciones(sistema.qryRanking());
+			vista.mostrarResultados(sistema.qryRanking());
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

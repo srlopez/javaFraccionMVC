@@ -8,20 +8,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import aritmetica.Fraccion;
+import aritmetica.Operacion;
+import aritmetica.OperacionTipo;
 
-public class ArtimeticaSQLite implements IAritmeticaDAO {
+public class OperacioneSQLite implements IOperacionesDAO {
 
-	String dbname = "data/aritmetica.db";
+	String dbname = "data/operaciones.db";
 
 	@Override
 	public void inicializar() {
-		File tempFile = new File(dbname);
+		File miFile = new File(dbname);
 
-		if (!tempFile.exists()) {
+		if (!miFile.exists()) {
 			// CREAMOS LA BD Y LAS TABLAS
 			try {
 				Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbname);
@@ -41,12 +44,20 @@ public class ArtimeticaSQLite implements IAritmeticaDAO {
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
 		} else {
-			System.out.println(tempFile);
+			// System.out.println(miFile);
 		}
 	}
-
+	
 	@Override
-	public int cmdRegistrarOperacion(String op, Fraccion f1, Fraccion f2, Fraccion fr) throws Exception {
+	public int cmdRegistrarOperacion(Operacion op) throws Exception {
+		int idOp = cmdInsertOperacion(op.tipo.toString(), op.f1, op.f2, op.resultado);
+		cmdInsertOperando(op.resultado, idOp, 0);
+		cmdInsertOperando(op.f1, idOp, 1);
+		cmdInsertOperando(op.f2, idOp, 2);
+		return idOp;
+	}
+	
+	private int cmdInsertOperacion(String op, Fraccion f1, Fraccion f2, Fraccion fr) throws Exception {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbname);
 			String sql = "INSERT INTO OPERACIONES (FH,TIPO,NR,DR,N1,D1,N2,D2) VALUES (DATETIME('now', 'localtime'),?,?,?,?,?,?,?)";
@@ -79,8 +90,7 @@ public class ArtimeticaSQLite implements IAritmeticaDAO {
 		}
 	}
 
-	@Override
-	public void cmdRegistrarOperando(Fraccion f, int idOp, int tipo) throws Exception {
+	private void cmdInsertOperando(Fraccion f, int idOp, int tipo) throws Exception {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbname);
 			String sql = "INSERT INTO OPERANDOS (F,IDOP,TIPO) VALUES (?,?,?)";
@@ -97,8 +107,23 @@ public class ArtimeticaSQLite implements IAritmeticaDAO {
 		}
 	};
 
-	private List<String> qryOperacionesWhere(String where) throws Exception {
-		List<String> ops = new ArrayList<String>();
+	private Operacion rsToOperacion(ResultSet rs) throws Exception {
+//		System.out.println((rs.getString("FH") + "\t" + rs.getInt("N1") + "/" + rs.getInt("D1") + " " + rs.getString("TIPO")
+//		+ " " + rs.getInt("N2") + "/" + rs.getInt("D2") + " = " + rs.getInt("NR") + "/"
+//		+ rs.getInt("DR"));
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	java.util.Date fh= dateFormat.parse(rs.getString("FH"));
+		return new Operacion(
+				fh, 
+				rs.getString("TIPO").equals("+")?OperacionTipo.SUMA:OperacionTipo.MULTIPLICACION,
+				new Fraccion(rs.getInt("N1"),rs.getInt("D1")),
+				new Fraccion(rs.getInt("N2"),rs.getInt("D2")),
+				new Fraccion(rs.getInt("NR"),rs.getInt("DR"))
+				);
+	}
+	
+	private List<Operacion> qryOperacionesWhere(String where) throws Exception {
+		List<Operacion> ops = new ArrayList<Operacion>();
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbname);
 			String sql = "SELECT OPERACIONES.* FROM OPERACIONES ";
@@ -107,9 +132,8 @@ public class ArtimeticaSQLite implements IAritmeticaDAO {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				ops.add(rs.getString("FH") + "\t" + rs.getInt("N1") + "/" + rs.getInt("D1") + " " + rs.getString("TIPO")
-						+ " " + rs.getInt("N2") + "/" + rs.getInt("D2") + " = " + rs.getInt("NR") + "/"
-						+ rs.getInt("DR"));
+				Operacion op = rsToOperacion(rs);
+				ops.add(op);
 			}
 			rs.close();
 			stmt.close();
@@ -122,8 +146,8 @@ public class ArtimeticaSQLite implements IAritmeticaDAO {
 	}
 
 	@Override
-	public List<String> qryOperacionesPor(Fraccion f) throws Exception {
-		List<String> ops = new ArrayList<String>();
+	public List<Operacion> qryOperacionesPor(Fraccion f) throws Exception {
+		List<Operacion> ops = new ArrayList<Operacion>();
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbname);
 			String sql = "SELECT OPERACIONES.* FROM OPERACIONES, OPERANDOS "
@@ -131,9 +155,8 @@ public class ArtimeticaSQLite implements IAritmeticaDAO {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				ops.add(rs.getString("FH") + "\t" + rs.getInt("N1") + "/" + rs.getInt("D1") + " " + rs.getString("TIPO")
-						+ " " + rs.getInt("N2") + "/" + rs.getInt("D2") + " = " + rs.getInt("NR") + "/"
-						+ rs.getInt("DR"));
+				Operacion op = rsToOperacion(rs);
+				ops.add(op);
 			}
 			rs.close();
 			stmt.close();
@@ -168,12 +191,19 @@ public class ArtimeticaSQLite implements IAritmeticaDAO {
 	}
 
 	@Override
-	public List<String> qryResultadosImpropios() throws Exception {
+	public List<Operacion> qryResultadosImpropios() throws Exception {
 		return qryOperacionesWhere("NR>DR");
 	}
 
 	@Override
-	public List<String> qryTodasLasOperaciones() throws Exception {
+	public List<Operacion> qryTodasLasOperaciones() throws Exception {
 		return qryOperacionesWhere("");
 	}
+
+	@Override
+	public void finalizar() {
+		
+	}
+
+
 }
