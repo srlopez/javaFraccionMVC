@@ -15,4 +15,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.jkiss.dbeaver.DBeaverNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>data/operaciones.txt</name>
+			<type>1</type>
+			<location>C:/Users/santi/source/eclipse/fraccionMVC/data/operaciones.txt</location>
+		</link>
+	</linkedResources>
 </projectDescription>

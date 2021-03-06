@@ -2,6 +2,8 @@ package persistencia;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,7 +20,9 @@ import aritmetica.OperacionTipo;
 
 public class OperacioneSQLite implements IOperacionesDAO {
 
-	String dbname = "data/operaciones.db";
+	String base = "data/operaciones";
+	String dbname = base+".db";
+	String script = base+".sql";
 
 	@Override
 	public void inicializar() {
@@ -29,14 +33,8 @@ public class OperacioneSQLite implements IOperacionesDAO {
 			try {
 				Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbname);
 				Statement stmt = conn.createStatement();
-				String sql = "CREATE TABLE OPERACIONES (" + " ID INTEGER PRIMARY KEY AUTOINCREMENT," + " FH   TEXT, "
-						+ " TIPO VARCHAR(1) CHECK (TIPO IN ('*','+')), " + " NR   INT, " + " DR   INT, " + " N1   INT, "
-						+ " D1   INT, " + " N2   INT, " + " D2   INT " + " )";
-				// System.out.println(sql);
-				stmt.executeUpdate(sql);
-				sql = "CREATE TABLE OPERANDOS (" + " F     TEXT NOT NULL, " + " IDOP  INT  NOT NULL, "
-						+ " TIPO  INT  NOT NULL, " + " PRIMARY KEY (F, IDOP, TIPO) " + " )";
-				System.out.println(sql);
+		        String sql = Files.readString( Path.of(script));
+//				System.out.println(sql);
 				stmt.executeUpdate(sql);
 				stmt.close();
 				conn.close();

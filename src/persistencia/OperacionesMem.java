@@ -83,20 +83,22 @@ public class OperacionesMem implements IOperacionesDAO {
 		return rops;
 	}
 
-	private void setValue(Map<String, Integer> ranking, String f) {
+	private void add1ToF(Map<String, Integer> ranking, String f) {
 		int v = ranking.getOrDefault(f, 0);
 		ranking.put(f, v + 1);
 	}
 
 	@Override
 	public List<String> qryRanking() throws Exception {
+		// Obtención del contador de apariciones de cada Fracción
 		Map<String, Integer> ranking = new HashMap<String, Integer>();
 		for (Operacion op : ops) {
-			setValue(ranking, op.f1.toString());
-			setValue(ranking, op.f2.toString());
-			setValue(ranking, op.resultado.toString());
+			add1ToF(ranking, op.f1.toString());
+			add1ToF(ranking, op.f2.toString());
+			add1ToF(ranking, op.resultado.toString());
 		}
-		
+		// Aplicación de programación funcional
+		// para obtener el resultado.
 		return ranking.entrySet()
 		  .stream()
 		  .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())

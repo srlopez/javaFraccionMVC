@@ -20,27 +20,27 @@ public class CtrlTerminal {
 			char opcion = vista.mostrarMenu();
 			switch (opcion) {
 			case '1': {
-				useCase1();
+				uc1SumaDeFracciones();
 				break;
 			}
 			case '2': {
-				useCase2();
+				uc1MultiplicacionDeFracciones();
 				break;
 			}
 			case '3': {
-				useCase3();
+				uc3RankingDeFracciones();
 				break;
 			}
 			case '4': {
-				useCase4();
+				uc4OperacionesXFraccion();
 				break;
 			}
 			case '5': {
-				useCase5();
+				uc5TodasLasOperaciones();
 				break;
 			}
 			case '6': {
-				useCase6();
+				uc6ResultadosImpropios();
 				break;
 			}
 			case 'F': {
@@ -60,88 +60,92 @@ public class CtrlTerminal {
 	/**
 	 * Punto de Entrada UC1
 	 */
-	public void useCase1() {
+	public void uc1SumaDeFracciones() {
 		try {
+			//Obtencion de información de usuario
 			Fraccion f1 = vista.leerFraccion();
 			Fraccion f2 = vista.leerFraccion();
 			// Reglas de Negocio
-			Requisitos.regla1(f1);
-			Requisitos.regla1(f2);
-			Requisitos.regla2();
+			Requisitos.rl1FraccionPropia(f1);
+			Requisitos.rl1FraccionPropia(f2);
+			Requisitos.rl2PeriodoValido();
 			// Ejecución de Caso de Uso
 			Fraccion result = sistema.suma(f1, f2);
+			// Presentación al usuario
 			vista.mostrarMsg("Resultado+ %s",result);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			vista.mostrarMsg("Excepción uc1: %s",e.getMessage());
 		}
 	}
 
 	/**
 	 * Punto de Entrada UC2
 	 */
-	public void useCase2() {
+	public void uc1MultiplicacionDeFracciones() {
 		try {
+			//Obtencion de información de usuario
 			Fraccion f1 = vista.leerFraccion();
 			Fraccion f2 = vista.leerFraccion();
 			// Reglas de Negocio
-			Requisitos.regla1(f1);
-			Requisitos.regla1(f2);
-			Requisitos.regla2();
+			Requisitos.rl1FraccionPropia(f1);
+			Requisitos.rl1FraccionPropia(f2);
+			Requisitos.rl2PeriodoValido();
 			// Ejecución de Caso de Uso
 			Fraccion result = sistema.multiplica(f1, f2);
+			// Presentación al usuario
 			vista.mostrarMsg("Resultado* %s",result);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			vista.mostrarMsg("Excepción uc2: %s",e.getMessage());
 		}
 	}
 
 	/**
 	 * Punto de Entrada UC3
 	 */
-	public void useCase3() {
+	public void uc3RankingDeFracciones() {
 		vista.mostrarMsg("UC#3 Ranking");
 
 		try {
 			vista.mostrarResultados(sistema.qryRanking());
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			vista.mostrarMsg("Excepción uc3: %s",e.getMessage());
 		}
 	}
 
 	/**
 	 * Punto de Entrada UC4
 	 */
-	public void useCase4() {
+	public void uc4OperacionesXFraccion() {
 		vista.mostrarMsg("UC#4 Operaciones por Fraccion");
 		try {
 			Fraccion f1 = vista.leerFraccion();
 			vista.mostrarOperaciones(sistema.qryOperacionesPor(f1));
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			vista.mostrarMsg("Excepción uc4: %s",e.getMessage());
 		}
 	}
 
 	/**
 	 * Punto de Entrada UC5
 	 */
-	public void useCase5() {
+	public void uc5TodasLasOperaciones() {
 		vista.mostrarMsg("UC#5 Todas las operaciones");
 		try {
 			vista.mostrarOperaciones(sistema.qryTodaslasOperaciones());
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			vista.mostrarMsg("Excepción uc5: %s",e.getMessage());
 		}
 	}
 	
 	/**
 	 * Punto de Entrada UC6
 	 */
-	public void useCase6() {
+	public void uc6ResultadosImpropios() {
 		vista.mostrarMsg("UC#6 Resultados impropios");
 		try {
 			vista.mostrarOperaciones(sistema.qryResultadosImpropios());
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			vista.mostrarMsg("Excepción uc6: %s",e.getMessage());
 		}
 	}
 
