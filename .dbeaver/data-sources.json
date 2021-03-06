@@ -4,28 +4,14 @@
 		"sqlite_jdbc-177f94f1200-7119bbdf4d4a6084": {
 			"provider": "generic",
 			"driver": "sqlite_jdbc",
-			"name": "fracciones.db",
+			"name": "operaciones.db",
 			"save-password": true,
 			"read-only": false,
 			"configuration": {
-				"database": "C:\\Users\\santi\\source\\eclipse\\fraccionMVC\\data\\fracciones.db",
-				"url": "jdbc:sqlite:C:\\Users\\santi\\source\\eclipse\\fraccionMVC\\data\\fracciones.db",
+				"database": "C:\\Users\\santi\\source\\eclipse\\fraccionMVC\\data\\operaciones.db",
+				"url": "jdbc:sqlite:C:\\Users\\santi\\source\\eclipse\\fraccionMVC\\data\\operaciones.db",
 				"type": "dev",
 				"auth-model": "native"
-			}
-		},
-		"sqlite_jdbc-177fccf49b2-21912d6914d2e040": {
-			"provider": "generic",
-			"driver": "sqlite_jdbc",
-			"name": "aritmetica.db",
-			"save-password": true,
-			"read-only": false,
-			"configuration": {
-				"database": "C:\\Users\\santi\\source\\eclipse\\fraccionMVC\\data\\aritmetica.db",
-				"url": "jdbc:sqlite:C:\\Users\\santi\\source\\eclipse\\fraccionMVC\\data\\aritmetica.db",
-				"type": "dev",
-				"auth-model": "native",
-				"handlers": {}
 			}
 		}
 	},

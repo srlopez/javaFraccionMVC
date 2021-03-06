@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import aritmetica.Fraccion;
 import aritmetica.Operacion;
@@ -29,6 +30,7 @@ public class OperacionesMem implements IOperacionesDAO {
 			try {
 				reader = new BufferedReader(new FileReader(filename));
 				String line = reader.readLine();
+				System.out.println(line);
 				while (line != null) {
 					try {
 						Operacion op = lineToOperacion(line);
@@ -52,11 +54,8 @@ public class OperacionesMem implements IOperacionesDAO {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		java.util.Date fh = dateFormat.parse(item[0] + " " + item[1]);
 
-		return new Operacion(fh, 
-				item[3].equals("+") ? OperacionTipo.SUMA : OperacionTipo.MULTIPLICACION,
-				new Fraccion(item[2]),
-				new Fraccion(item[4]), 
-				new Fraccion(item[6]));
+		return new Operacion(fh, item[3].equals("+") ? OperacionTipo.SUMA : OperacionTipo.MULTIPLICACION,
+				new Fraccion(item[2]), new Fraccion(item[4]), new Fraccion(item[6]));
 
 	}
 
@@ -85,7 +84,7 @@ public class OperacionesMem implements IOperacionesDAO {
 	}
 
 	private void setValue(Map<String, Integer> ranking, String f) {
-		int v = ranking.get(f) == null ? 0 : ranking.get(f);
+		int v = ranking.getOrDefault(f, 0);
 		ranking.put(f, v + 1);
 	}
 
@@ -97,13 +96,14 @@ public class OperacionesMem implements IOperacionesDAO {
 			setValue(ranking, op.f2.toString());
 			setValue(ranking, op.resultado.toString());
 		}
-		List<Map.Entry<String, Integer>> list = new ArrayList<>(ranking.entrySet());
-		list.sort(Map.Entry.<String, Integer>comparingByValue().reversed());
-
-		List<String> rops = new ArrayList<String>();
-		list.forEach(e -> rops.add(e.getKey() + " " + e.getValue()));
-		return rops.subList(0, 3);
-	}
+		
+		return ranking.entrySet()
+		  .stream()
+		  .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+		  .limit(3)
+		  .map(e -> e.getKey() + " " + e.getValue())
+		  .collect(Collectors.toList());
+    }
 
 	@Override
 	public List<Operacion> qryResultadosImpropios() throws Exception {
