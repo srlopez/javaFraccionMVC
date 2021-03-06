@@ -1,7 +1,6 @@
 package persistencia;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -33,17 +32,15 @@ public class OperacioneSQLite implements IOperacionesDAO {
 			try {
 				Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbname);
 				Statement stmt = conn.createStatement();
-		        String sql = Files.readString( Path.of(script));
-//				System.out.println(sql);
+		        String sql = Files.readString(Path.of(script));
+				//System.out.println(sql);
 				stmt.executeUpdate(sql);
 				stmt.close();
 				conn.close();
 			} catch (Exception e) {
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
-		} else {
-			// System.out.println(miFile);
-		}
+		} 
 	}
 	
 	@Override
