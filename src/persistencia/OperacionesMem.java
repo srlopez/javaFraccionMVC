@@ -30,7 +30,7 @@ public class OperacionesMem implements IOperacionesDAO {
 			try {
 				reader = new BufferedReader(new FileReader(filename));
 				String line = reader.readLine();
-				System.out.println(line);
+				//System.out.println(line);
 				while (line != null) {
 					try {
 						Operacion op = lineToOperacion(line);

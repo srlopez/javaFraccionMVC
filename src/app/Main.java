@@ -11,18 +11,13 @@ public class Main {
 //		String dir = System.getProperty("user.dir");
 //		System.out.println("Estás corriendo en " + dir);
 		
-		// Run con un Repositorio SQL
-		IOperacionesDAO repo = new OperacioneSQLite();
+		// Run con un Repositorio SQL/Mem
+		// IOperacionesDAO repo = new OperacioneSQLite();
+		IOperacionesDAO repo = new OperacionesMem();
 		CalculadoraDB sistemaDB = new CalculadoraDB(repo);
 		ViewTerminal view = new ViewTerminal();
 		CtrlTerminal ctrlt = new CtrlTerminal(sistemaDB, view);
 		ctrlt.run();
 		
-		// Run con un Repositorio en memoria
-		repo = new OperacionesMem();
-		sistemaDB = new CalculadoraDB(repo);
-		ctrlt = new CtrlTerminal(sistemaDB, view);
-		ctrlt.run();
-
 	}
 }
